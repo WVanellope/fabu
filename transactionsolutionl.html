@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>交易结算平台解决方案</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --bg-soft: #f1f5f9;
+      --bg-card: #ffffff;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --text-soft: #475569;
+      --text-light: #64748b;
+      --dark: #0f172a;
+      --white: #ffffff;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --container: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: linear-gradient(to bottom, #f8fafc, #ffffff, #f1f5f9);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(var(--container), calc(100% - 48px)); margin: 0 auto; }
+    .section { padding: 88px 0; }
+    .section.alt { background: var(--bg-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .section-line { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fff; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top right, rgba(59,130,246,.10), transparent 28%),
+        radial-gradient(circle at left center, rgba(99,102,241,.10), transparent 25%),
+        linear-gradient(to bottom, #f8fafc, #ffffff);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 40px;
+      align-items: center;
+      padding: 88px 0 96px;
+    }
+
+    h1 {
+      margin: 20px 0 0;
+      font-size: clamp(38px, 5.5vw, 68px);
+      line-height: 1.06;
+      letter-spacing: -.03em;
+    }
+
+    h1 .muted { color: #64748b; }
+
+    .hero-desc {
+      margin-top: 22px;
+      max-width: 760px;
+      font-size: 18px;
+      line-height: 1.9;
+      color: var(--text-soft);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 22px;
+      border-radius: 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .btn.primary {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .tag-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eef2f7;
+      color: #334155;
+      font-size: 13px;
+      border: 1px solid var(--line);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .card-body { padding: 24px; }
+    .card-header { padding: 22px 24px 0; }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .overview-list { display: grid; gap: 12px; margin-top: 8px; }
+    .overview-item { border: 1px solid var(--line); background: var(--bg-soft); border-radius: 18px; padding: 16px; }
+    .overview-item-head { display: flex; gap: 12px; align-items: flex-start; }
+    .overview-name { font-weight: 700; }
+    .mini-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .mini-tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text-soft);
+    }
+
+    .section-head { max-width: 820px; margin-bottom: 40px; }
+    .section-head h2 {
+      margin: 14px 0 0;
+      font-size: clamp(30px, 3.2vw, 46px);
+      line-height: 1.18;
+      letter-spacing: -.02em;
+    }
+    .section-head p {
+      margin: 16px 0 0;
+      font-size: 17px;
+      line-height: 1.9;
+      color: var(--text-soft);
+    }
+
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+    .feature-card h3, .value-card h3, .journey-card h3 { margin: 14px 0 0; font-size: 20px; }
+    .feature-card p, .value-card p, .journey-card p {
+      margin: 12px 0 0;
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--text-soft);
+    }
+
+    .solution-points { margin-top: 14px; display: grid; gap: 10px; }
+    .solution-point {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-soft);
+    }
+
+    .check {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--dark);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .interactive {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .menu-list { display: grid; gap: 12px; }
+    .menu-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 18px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .menu-btn:hover { background: #f8fafc; }
+    .menu-btn.active { background: var(--dark); border-color: var(--dark); color: #fff; box-shadow: var(--shadow); }
+    .menu-btn-title { font-size: 16px; font-weight: 700; }
+    .menu-btn-desc { margin-top: 8px; font-size: 12px; line-height: 1.7; color: inherit; opacity: .78; }
+
+    .detail-panel { min-height: 420px; overflow: hidden; }
+    .detail-title { display: flex; gap: 14px; align-items: flex-start; }
+    .detail-title h3 { margin: 0; font-size: 30px; }
+    .detail-title p { margin: 10px 0 0; font-size: 14px; line-height: 1.9; color: var(--text-soft); }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px; }
+    .detail-block-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+    .pill-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .pill { border: 1px solid var(--line); background: var(--bg-soft); border-radius: 16px; padding: 14px 16px; font-size: 14px; color: var(--text-soft); }
+    .scene-list { display: grid; gap: 12px; }
+    .scene-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--text-soft);
+    }
+
+    .screen-shell { overflow: hidden; padding: 0; }
+    .window-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #f1f5f9;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 999px; background: #cbd5e1; }
+    .window-title { margin-left: 6px; font-size: 14px; font-weight: 600; color: #64748b; }
+    .screen-content { padding: 24px; background: #fff; }
+
+    .top-row, .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .muted { color: var(--text-light); }
+    .small { font-size: 14px; }
+    .tiny { font-size: 12px; }
+    .strong { font-weight: 700; }
+    .screen-title { font-size: 24px; font-weight: 700; }
+
+    .stat-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+    .stat-card, .panel-soft { border: 1px solid var(--line); background: var(--bg-soft); border-radius: 18px; padding: 16px; }
+    .stat-value { margin-top: 10px; font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+
+    .table-wrap { margin-top: 18px; border: 1px solid var(--line); background: var(--bg-soft); border-radius: 18px; padding: 16px; }
+    .table-grid { display: grid; gap: 12px; }
+    .table-row-5, .table-head-5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .cell {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .wizard-grid { display: grid; grid-template-columns: 220px 1fr; gap: 20px; margin-top: 18px; }
+    .step-list { display: grid; gap: 10px; }
+    .step-item { padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: #fff; color: var(--text-soft); font-size: 14px; }
+    .step-item.active { background: var(--dark); border-color: var(--dark); color: #fff; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .field label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-light); }
+    .input-mock, .textarea-mock {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+    .textarea-mock { min-height: 116px; }
+    .action-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+
+    .review-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; margin-top: 18px; }
+    .review-item { border: 1px solid var(--line); background: #fff; border-radius: 18px; padding: 16px; margin-top: 12px; }
+    .priority { padding: 6px 10px; border-radius: 999px; background: #f1f5f9; font-size: 12px; color: var(--text-soft); border: 1px solid var(--line); white-space: nowrap; }
+
+    .chart-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 20px; margin-top: 18px; }
+    .bar-chart {
+      height: 240px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+    .bar { flex: 1; background: #cbd5e1; border-radius: 14px 14px 0 0; min-height: 30px; }
+    .warning-list { display: grid; gap: 12px; margin-top: 14px; }
+    .warning-item { border: 1px solid var(--line); background: #fff; border-radius: 18px; padding: 16px; font-size: 14px; line-height: 1.9; color: var(--text-soft); }
+
+    .journey-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+    .journey-card { position: relative; }
+    .step-label { font-size: 12px; font-weight: 700; color: #94a3b8; letter-spacing: .08em; }
+    .journey-arrow { position: absolute; right: -18px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #cbd5e1; font-weight: 700; }
+
+    .value-top { font-size: 13px; color: var(--text-light); }
+    .value-main { margin-top: 12px; font-size: 32px; font-weight: 800; line-height: 1.15; letter-spacing: -.02em; }
+
+    @media (max-width: 1100px) {
+      .hero-grid, .interactive, .review-grid, .chart-grid, .wizard-grid, .detail-grid { grid-template-columns: 1fr; }
+      .grid-4, .journey-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .journey-arrow { display: none; }
+    }
+
+    @media (max-width: 760px) {
+      .container { width: min(var(--container), calc(100% - 28px)); }
+      .section { padding: 64px 0; }
+      .grid-4, .journey-grid, .stat-grid-4, .form-grid, .pill-grid, .table-head-5, .table-row-5 { grid-template-columns: 1fr; }
+      .hero-grid { padding: 60px 0 68px; }
+      .screen-title { font-size: 22px; }
+      .detail-title h3 { font-size: 24px; }
+      .card-body, .screen-content { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="badge">交易结算平台解决方案</span>
+        <h1>用一套统一的交易结算平台，<span class="muted">解决履约乱、分账慢、结算重、风险高等问题</span></h1>
+        <p class="hero-desc">
+          电商平台架构下，打造以订单为引擎的交易结算平台。订单管理服务履约周期，同时自动触发支付、结算、清分等关节，让服务与资金流转从“事后人工处理”升级为“订单所向，资金必达”，实现交易全链路可控、可追踪、可核算
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#solution">查看核心能力 →</a>
+          <a class="btn" href="#capabilities">核心能力概览</a>
+        </div>
+        <div class="tag-list">
+          <span class="tag">订单履约服务</span>
+          <span class="tag">线上线下支付</span>
+          <span class="tag">三方指令清分</span>
+          <span class="tag">内外部结算记账</span>
+          <span class="tag">统一交易台账</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="icon-box">💳</span>方案总览</div>
+        </div>
+        <div class="card-body">
+          <div class="overview-list">
+            <div class="overview-item">
+              <div class="overview-item-head">
+                <span class="icon-box">📘</span>
+                <div>
+                  <div class="overview-name">统一订单服务中心</div>
+                  <div class="mini-tags">
+                    <span class="mini-tag">订单为核心引擎驱动</span>
+                    <span class="mini-tag">串联商品与营销</span>
+                    <span class="mini-tag">联动履约与服务</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="overview-item">
+              <div class="overview-item-head">
+                <span class="icon-box">🧮</span>
+                <div>
+                  <div class="overview-name">支付产品中心</div>
+                  <div class="mini-tags">
+                    <span class="mini-tag">线上三方支付</span>
+                    <span class="mini-tag">线下来账认款</span>
+                    <span class="mini-tag">多种交易环境适配</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="overview-item">
+              <div class="overview-item-head">
+                <span class="icon-box">🔎</span>
+                <div>
+                  <div class="overview-name">资金结算中心</div>
+                  <div class="mini-tags">
+                    <span class="mini-tag">结算规则灵活配置</span>
+                    <span class="mini-tag">三方商家清分</span>
+                    <span class="mini-tag">实时/定期结算</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="overview-item">
+              <div class="overview-item-head">
+                <span class="icon-box">🛡</span>
+                <div>
+                  <div class="overview-name">统一交易台账</div>
+                  <div class="mini-tags">
+                    <span class="mini-tag">公司统一台账底座</span>
+                    <span class="mini-tag">覆盖C端用户/B端商家</span>
+                    <span class="mini-tag">实名统一管理</span>
+<span class="mini-tag">绑卡/提现/账单核对</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">业务痛点</span>
+        <h2>为什么需要统一的交易结算平台</h2>
+        <p>当平台存在多角色交易、多阶段履约、多种资金处理方式时，传统靠人工台账和分散系统拼接的方式，已经很难支撑规模化经营与资金安全。</p>
+      </div>
+      <div class="grid-4">
+        <div class="card feature-card"><div class="card-body"><span class="icon-box">🧩</span><h3>交易与账务割裂</h3><p>订单、支付、退款、补贴、手续费等数据分散在不同系统，口径不统一，导致结算依据不清、追溯困难。</p></div></div>
+        <div class="card feature-card"><div class="card-body"><span class="icon-box">📤</span><h3>分账结算依赖人工</h3><p>不同商家、渠道和业务模式需要不同分账逻辑，依赖人工计算和表格流转，效率低且容易出错。</p></div></div>
+        <div class="card feature-card"><div class="card-body"><span class="icon-box">🔍</span><h3>对账异常难定位</h3><p>平台、商家、支付渠道之间缺少统一对账链路，差异发现晚、定位慢，异常往往要靠人工逐条排查。</p></div></div>
+        <div class="card feature-card"><div class="card-body"><span class="icon-box">⚠️</span><h3>资金风险难管控</h3><p>冻结、垫资、退款、补偿、重复结算等风险缺少统一规则与预警机制，容易带来资金损失和信任风险。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="solution">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">解决方案</span>
+        <h2>一套平台，打通交易、账务、结算、对账与风险治理</h2>
+        <p>核心不是只做“出款工具”，而是围绕交易资金链路建立统一账务底座，把每一笔交易从发生到结清都可记录、可计算、可核对、可审计。</p>
+      </div>
+      <div class="grid-4">
+        <div class="card"><div class="card-header"><div class="card-title"><span class="icon-box">📘</span>统一交易账务底座</div></div><div class="card-body"><div class="solution-points"><div class="solution-point"><span class="check">✓</span><span>订单 / 支付 / 退款统一入账</span></div><div class="solution-point"><span class="check">✓</span><span>标准化账务流水模型</span></div><div class="solution-point"><span class="check">✓</span><span>形成统一结算依据</span></div></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title"><span class="icon-box">🧮</span>分账结算中心</div></div><div class="card-body"><div class="solution-points"><div class="solution-point"><span class="check">✓</span><span>多角色分账规则</span></div><div class="solution-point"><span class="check">✓</span><span>账单生成与周期结算</span></div><div class="solution-point"><span class="check">✓</span><span>自动出款与状态跟踪</span></div></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title"><span class="icon-box">🔎</span>对账核账中心</div></div><div class="card-body"><div class="solution-points"><div class="solution-point"><span class="check">✓</span><span>平台 / 商家 / 渠道多方对账</span></div><div class="solution-point"><span class="check">✓</span><span>差异明细定位</span></div><div class="solution-point"><span class="check">✓</span><span>异常处理闭环</span></div></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title"><span class="icon-box">🛡</span>风险稽核治理</div></div><div class="card-body"><div class="solution-points"><div class="solution-point"><span class="check">✓</span><span>异常预警与阈值控制</span></div><div class="solution-point"><span class="check">✓</span><span>冻结 / 解冻 / 拦截能力</span></div><div class="solution-point"><span class="check">✓</span><span>全链路审计留痕</span></div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="capabilities">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">核心能力</span>
+        <h2>既能支撑日常结算作业，也能支撑复杂业务模式扩张</h2>
+        <p>围绕交易、账务和资金对象建立标准能力中心，让财务、运营、商家和风控都围绕同一套结算体系协作。点击左侧模块，可查看详细说明、场景与具体能力。</p>
+      </div>
+      <div class="interactive">
+        <div class="card"><div class="card-body"><div class="menu-list" id="capabilityMenu"></div></div></div>
+        <div class="card detail-panel"><div class="card-body" id="capabilityDetail"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="screens">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">功能界面示意</span>
+        <p>选取 4 个最关键的后台页面，帮助更直观地理解交易结算平台如何承载账单管理、分账配置、差异核账与经营分析。</p>
+      </div>
+      <div class="interactive">
+        <div class="card"><div class="card-body"><div class="menu-list" id="screenMenu"></div></div></div>
+        <div class="card screen-shell"><div id="screenDetail"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-line section">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">业务流程</span>
+        <h2>把交易结算从“月末人工处理”升级成“全链路自动闭环”</h2>
+        <p>通过统一入账、自动分账、周期结算、异常对账与风险控制，把每一笔交易从发生到结清都串成连续链路。</p>
+      </div>
+      <div class="journey-grid">
+        <div class="card journey-card"><div class="card-body"><div class="step-label">STEP 01</div><h3>统一交易入账</h3><p>订单、支付、退款、补贴、手续费等统一沉淀到账务台账，形成标准账务明细。</p></div><div class="journey-arrow">→</div></div>
+        <div class="card journey-card"><div class="card-body"><div class="step-label">STEP 02</div><h3>规则化分账与计费</h3><p>按商家、渠道、业务模式和费用规则自动计算应收应付，生成分账明细与结算账单。</p></div><div class="journey-arrow">→</div></div>
+        <div class="card journey-card"><div class="card-body"><div class="step-label">STEP 03</div><h3>核账与结算出款</h3><p>完成多方对账、差异处理、账单确认后，执行结算出款并跟踪状态与回执。</p></div><div class="journey-arrow">→</div></div>
+        <div class="card journey-card"><div class="card-body"><div class="step-label">STEP 04</div><h3>异常治理与审计追踪</h3><p>围绕结算失败、重复结算、异常退款、账实不一致等问题进行预警、冻结和审计追溯。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">业务价值</span>
+        <h2>最终带来的，不只是一个结算系统，而是一套可规模化的资金运营能力</h2>
+        <p>交易结算平台的目标不是把财务动作搬到线上，而是帮助业务真正实现账务一致、结算高效、风险可控、经营可量化。</p>
+      </div>
+      <div class="grid-4">
+        <div class="card value-card"><div class="card-body"><div class="value-top">提升结算效率</div><div class="value-main">自动化结算</div><p>通过规则化分账、账单生成与自动出款，减少人工计算和线下流转。</p></div></div>
+        <div class="card value-card"><div class="card-body"><div class="value-top">提升账务准确性</div><div class="value-main">账实一致</div><p>统一交易入账与对账闭环，降低漏结、错结、重复结算等问题发生概率。</p></div></div>
+        <div class="card value-card"><div class="card-body"><div class="value-top">提升风险治理能力</div><div class="value-main">可控可追溯</div><p>围绕异常预警、冻结拦截、审计留痕，形成全链路资金风险管理能力。</p></div></div>
+        <div class="card value-card"><div class="card-body"><div class="value-top">支撑多模式扩张</div><div class="value-main">平台化复用</div><p>同一套结算能力支持直营网点、商家入驻、服务履约、渠道合作等不同业务形态。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const capabilities = [
+      {
+        id: 'ledger-center',
+        title: '交易账务中心',
+        summary: '围绕订单、支付、退款、补贴、手续费建立统一账务台账。',
+        desc: '解决交易数据分散、结算依据不统一的问题，让每一笔交易都有清晰的账务归集和追踪链路，成为后续分账、结算、核账的统一底座。',
+        items: ['交易流水归集', '账务明细台账', '收入 / 成本 / 调整项记录', '多来源数据映射'],
+        scenes: ['支付成功后自动入账', '退款、补贴、手续费同步记账', '按订单、商家、时间维度追溯账务明细']
+      },
+      {
+        id: 'split-center',
+        title: '分账结算中心',
+        summary: '通过规则引擎完成多角色、多模式、多周期的分账与结算。',
+        desc: '解决不同商家、渠道和业务模式结算逻辑复杂、人工计算成本高的问题，让平台能够按规则自动生成应收应付和结算账单。',
+        items: ['分账规则配置', '账单生成', '应收应付管理', '出款执行与跟踪'],
+        scenes: ['按订单维度实时分账', '按周 / 月结算生成账单', '支持佣金、服务费、补贴等多种费用项计算']
+      },
+      {
+        id: 'recon-center',
+        title: '对账核账中心',
+        summary: '统一处理平台、商家、支付渠道之间的账务核对与差异处理。',
+        desc: '解决差异发现晚、定位慢、处理链路长的问题，让核账从人肉比对变成系统化对账和异常闭环。',
+        items: ['多方对账任务', '差异明细定位', '异常处理工单', '账单确认回传'],
+        scenes: ['平台对商家账单进行核对', '支付渠道与平台流水自动核账', '差异订单自动进入异常池等待处理']
+      },
+      {
+        id: 'risk-center',
+        title: '风险稽核中心',
+        summary: '围绕异常结算、异常退款和账实不一致建立风险治理能力。',
+        desc: '解决资金链路中异常识别和拦截能力不足的问题，让平台对高风险交易、结算异常和重复操作具备实时控制能力。',
+        items: ['异常预警规则', '冻结 / 解冻控制', '人工复核台', '审计日志与追踪'],
+        scenes: ['大额异常退款自动预警', '结算失败账户自动冻结等待复核', '关键操作全链路记录审计日志']
+      }
+    ];
+
+    const productScreens = [
+      {
+        id: 'bill',
+        title: '结算账单列表页',
+        summary: '统一查看账单状态、商家、结算周期、应结金额与异常状态。',
+        highlights: ['账单筛选', '批量确认', '账单状态追踪']
+      },
+      {
+        id: 'rule',
+        title: '分账规则配置页',
+        summary: '配置不同业务模式下的分账规则、费用项和生效范围。',
+        highlights: ['规则化分账', '费用项配置', '版本生效管理']
+      },
+      {
+        id: 'recon',
+        title: '对账工作台',
+        summary: '集中处理平台、商家、渠道之间的对账差异与异常订单。',
+        highlights: ['差异池', '异常定位', '处理闭环']
+      },
+      {
+        id: 'risk',
+        title: '结算经营看板',
+        summary: '围绕结算效率、异常率、出款成功率和资金风险做经营分析。',
+        highlights: ['核心指标总览', '风险预警', '效率分析']
+      }
+    ];
+
+    const capabilityMenu = document.getElementById('capabilityMenu');
+    const capabilityDetail = document.getElementById('capabilityDetail');
+    const screenMenu = document.getElementById('screenMenu');
+    const screenDetail = document.getElementById('screenDetail');
+
+    let activeCapability = capabilities[0].id;
+    let activeScreen = productScreens[0].id;
+
+    function renderCapabilityMenu() {
+      capabilityMenu.innerHTML = capabilities.map(item => `
+        <button class="menu-btn ${item.id === activeCapability ? 'active' : ''}" data-id="${item.id}">
+          <div class="menu-btn-title">${item.title}</div>
+          <div class="menu-btn-desc">${item.summary}</div>
+        </button>
+      `).join('');
+
+      capabilityMenu.querySelectorAll('.menu-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeCapability = btn.dataset.id;
+          renderCapabilityMenu();
+          renderCapabilityDetail();
+        });
+      });
+    }
+
+    function renderCapabilityDetail() {
+      const item = capabilities.find(x => x.id === activeCapability) || capabilities[0];
+      capabilityDetail.innerHTML = `
+        <div class="detail-title">
+          <span class="icon-box">✨</span>
+          <div>
+            <h3>${item.title}</h3>
+            <p>${item.desc}</p>
+          </div>
+        </div>
+        <div class="detail-grid">
+          <div>
+            <div class="detail-block-title">包含能力</div>
+            <div class="pill-grid">
+              ${item.items.map(x => `<div class="pill">${x}</div>`).join('')}
+            </div>
+          </div>
+          <div>
+            <div class="detail-block-title">典型场景</div>
+            <div class="scene-list">
+              ${item.scenes.map(x => `<div class="scene-item"><span class="check">✓</span><span>${x}</span></div>`).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderScreenMenu() {
+      screenMenu.innerHTML = productScreens.map(item => `
+        <button class="menu-btn ${item.id === activeScreen ? 'active' : ''}" data-id="${item.id}">
+          <div class="menu-btn-title">${item.title}</div>
+          <div class="menu-btn-desc">${item.summary}</div>
+          <div class="mini-tags" style="margin-top:12px;">
+            ${item.highlights.map(tag => `<span class="mini-tag" style="background:${item.id === activeScreen ? 'rgba(255,255,255,.08)' : '#f1f5f9'};color:${item.id === activeScreen ? '#e2e8f0' : '#475569'};border-color:${item.id === activeScreen ? 'rgba(255,255,255,.08)' : '#e2e8f0'};">${tag}</span>`).join('')}
+          </div>
+        </button>
+      `).join('');
+
+      screenMenu.querySelectorAll('.menu-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeScreen = btn.dataset.id;
+          renderScreenMenu();
+          renderScreenDetail();
+        });
+      });
+    }
+
+    function screenWindow(title, inner) {
+      return `
+        <div class="window-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="window-title">${title} · 页面示意</span>
+        </div>
+        <div class="screen-content">${inner}</div>
+      `;
+    }
+
+    function renderScreenDetail() {
+      const screens = {
+        bill: `
+          <div class="top-row">
+            <div>
+              <div class="screen-title">结算账单管理</div>
+              <div class="small muted" style="margin-top:6px;">统一管理待确认、待出款、已完成、异常账单</div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <div class="btn">导出账单</div>
+              <div class="btn primary">发起结算</div>
+            </div>
+          </div>
+          <div class="stat-grid-4">
+            <div class="stat-card"><div class="tiny muted">待确认账单</div><div class="stat-value">186</div></div>
+            <div class="stat-card"><div class="tiny muted">待出款</div><div class="stat-value">92</div></div>
+            <div class="stat-card"><div class="tiny muted">已完成</div><div class="stat-value">1,284</div></div>
+            <div class="stat-card"><div class="tiny muted">异常账单</div><div class="stat-value">14</div></div>
+          </div>
+          <div class="table-wrap">
+            <div class="table-grid">
+              <div class="table-head-5"><div class="cell">账单编号</div><div class="cell">结算对象</div><div class="cell">结算周期</div><div class="cell">应结金额</div><div class="cell">账单状态</div></div>
+              <div class="table-row-5"><div class="cell">JS202604-00128</div><div class="cell">华东直营网点</div><div class="cell">2026-04-01 ~ 2026-04-07</div><div class="cell">¥ 2,186,420</div><div class="cell">待确认</div></div>
+              <div class="table-row-5"><div class="cell">JS202604-00129</div><div class="cell">优选合作商A</div><div class="cell">2026-04-01 ~ 2026-04-07</div><div class="cell">¥ 684,200</div><div class="cell">待出款</div></div>
+              <div class="table-row-5"><div class="cell">JS202604-00130</div><div class="cell">渠道合作商B</div><div class="cell">2026-04-01 ~ 2026-04-07</div><div class="cell">¥ 98,530</div><div class="cell">异常</div></div>
+            </div>
+          </div>
+        `,
+        rule: `
+          <div class="flex-between">
+            <div>
+              <div class="screen-title">分账规则配置</div>
+              <div class="small muted" style="margin-top:6px;">按业务模式配置佣金、服务费、补贴与结算逻辑</div>
+            </div>
+            <div class="btn">保存草稿</div>
+          </div>
+          <div class="wizard-grid">
+            <div class="panel-soft">
+              <div class="step-list">
+                <div class="step-item active">1. 适用范围</div>
+                <div class="step-item">2. 费用项配置</div>
+                <div class="step-item">3. 分账对象</div>
+                <div class="step-item">4. 生效周期</div>
+                <div class="step-item">5. 发布规则</div>
+              </div>
+            </div>
+            <div class="panel-soft">
+              <div class="form-grid">
+                ${['规则名称','业务线','交易类型','结算对象','结算周期','币种'].map(label => `<div class="field"><label>${label}</label><div class="input-mock">请输入或选择</div></div>`).join('')}
+              </div>
+              <div class="field" style="margin-top:14px;">
+                <label>费用项说明</label>
+                <div class="textarea-mock">支持配置佣金、服务费、补贴、违约金、税费等多个费用项与计算规则</div>
+              </div>
+              <div class="action-row"><div class="btn">上一步</div><div class="btn primary">下一步</div></div>
+            </div>
+          </div>
+        `,
+        recon: `
+          <div class="flex-between">
+            <div>
+              <div class="screen-title">对账工作台</div>
+              <div class="small muted" style="margin-top:6px;">集中处理平台、商家、支付渠道的对账差异与异常订单</div>
+            </div>
+            <div class="btn primary">批量确认差异</div>
+          </div>
+          <div class="review-grid">
+            <div class="panel-soft">
+              <div class="strong small">差异账务池</div>
+              <div class="review-item"><div class="flex-between"><div><div class="strong">订单 T202604080012</div><div class="small muted" style="margin-top:6px;">差异类型：支付渠道金额不一致</div></div><div class="priority">高优先级</div></div></div>
+              <div class="review-item"><div class="flex-between"><div><div class="strong">订单 T202604080035</div><div class="small muted" style="margin-top:6px;">差异类型：退款状态未同步</div></div><div class="priority">中优先级</div></div></div>
+              <div class="review-item"><div class="flex-between"><div><div class="strong">账单 JS202604-00130</div><div class="small muted" style="margin-top:6px;">差异类型：商家确认金额不一致</div></div><div class="priority">高优先级</div></div></div>
+            </div>
+            <div class="panel-soft">
+              <div class="strong small">差异详情</div>
+              <div class="review-item" style="margin-top:14px;">
+                <div class="strong small">问题字段</div>
+                <div class="warning-list">
+                  <div class="warning-item">平台记账金额：¥ 12,800</div>
+                  <div class="warning-item">渠道返回金额：¥ 12,000</div>
+                  <div class="warning-item">差异值：¥ 800，待确认补贴是否入账</div>
+                </div>
+                <div class="field" style="margin-top:14px;"><label>处理意见</label><div class="textarea-mock" style="min-height:100px;">请输入处理意见或转派说明</div></div>
+                <div class="action-row" style="justify-content:flex-start;"><div class="btn">转派处理</div><div class="btn primary">确认并修正</div></div>
+              </div>
+            </div>
+          </div>
+        `,
+        risk: `
+          <div class="flex-between">
+            <div>
+              <div class="screen-title">结算经营看板</div>
+              <div class="small muted" style="margin-top:6px;">围绕结算效率、成功率、异常率和风险暴露做分析</div>
+            </div>
+            <div class="btn">近30天</div>
+          </div>
+          <div class="stat-grid-4">
+            <div class="stat-card"><div class="tiny muted">结算成功率</div><div class="stat-value">98.7%</div></div>
+            <div class="stat-card"><div class="tiny muted">平均结算时长</div><div class="stat-value">1.8天</div></div>
+            <div class="stat-card"><div class="tiny muted">对账异常率</div><div class="stat-value">0.9%</div></div>
+            <div class="stat-card"><div class="tiny muted">风险预警数</div><div class="stat-value">23</div></div>
+          </div>
+          <div class="chart-grid">
+            <div class="panel-soft">
+              <div class="strong small">趋势示意</div>
+              <div class="bar-chart">
+                <div class="bar" style="height:42%"></div><div class="bar" style="height:56%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:72%"></div><div class="bar" style="height:68%"></div><div class="bar" style="height:84%"></div><div class="bar" style="height:90%"></div><div class="bar" style="height:86%"></div>
+              </div>
+            </div>
+            <div class="panel-soft">
+              <div class="strong small">风险预警</div>
+              <div class="warning-list">
+                <div class="warning-item">5笔大额退款未完成核账，建议优先复核</div>
+                <div class="warning-item">2个商家结算失败率连续升高，建议检查收款账户</div>
+                <div class="warning-item">11笔账单存在重复出款风险，已进入冻结待审状态</div>
+              </div>
+            </div>
+          </div>
+        `
+      };
+
+      const current = screens[activeScreen] || screens.bill;
+      const title = productScreens.find(x => x.id === activeScreen)?.title || '功能页面';
+      screenDetail.innerHTML = screenWindow(title, current);
+    }
+
+    renderCapabilityMenu();
+    renderCapabilityDetail();
+    renderScreenMenu();
+    renderScreenDetail();
+  </script>
+</body>
+</html>
